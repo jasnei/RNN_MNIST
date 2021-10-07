@@ -16,6 +16,7 @@ if __name__ == '__main__':
             layer_dim=1,
             output_dim=10
         )
+    model.cuda()
     lr = 3e-4
     optimizer = optim.RMSprop(model.parameters(), lr=lr)
     criterion = nn.CrossEntropyLoss()
@@ -26,6 +27,7 @@ if __name__ == '__main__':
     test_losses = []
     test_acces = []
 
+    print("Training...")
     for epoch in range(epochs):
 
         model.train()
@@ -33,6 +35,8 @@ if __name__ == '__main__':
         train_num = 0
         for step, (images, labels) in enumerate(train_loader):
             images = images.view(-1, 28, 28)
+            images = images.cuda()
+            labels = labels.cuda()
             output = model(images)
             preds = torch.argmax(output, dim=1)
             loss = criterion(output, labels)
@@ -51,6 +55,8 @@ if __name__ == '__main__':
         test_num = 0
         for step, (images, labels) in enumerate(test_loader):
             images = images.view(-1, 28, 28)
+            images = images.cuda()
+            labels = labels.cuda()
             output = model(images)
             preds = torch.argmax(output, dim=1)
             loss = criterion(output, labels)

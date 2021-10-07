@@ -28,6 +28,7 @@ def get_dataset(root="../data/", train_batch_size=64, test_batch_size=100, num_w
         batch_size=train_batch_size,
         shuffle=True,
         num_workers=num_workers,
+        pin_memory=True,
     )
 
     test_loader = Data.DataLoader(
@@ -35,6 +36,7 @@ def get_dataset(root="../data/", train_batch_size=64, test_batch_size=100, num_w
         batch_size=test_batch_size,
         shuffle=False,
         num_workers=num_workers,
+        pin_memory=True,
     )
 
     return train_loader, test_loader,
