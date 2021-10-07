@@ -19,6 +19,7 @@ def get_dataset(root="../data/", train_batch_size=64, test_batch_size=100, num_w
     test_data = MNIST(
         root=root,
         train=False,
+        transform=transforms.ToTensor(),
         download=False,
     )
 

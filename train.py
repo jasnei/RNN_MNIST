@@ -6,7 +6,10 @@ from model_design import RNNClasssifier
 
 if __name__ == '__main__':
 
-    train_loader, train_data_y, test_loader, test_data_y = get_dataset()
+    train_loader, test_loader = get_dataset()
+    print(f"train_loader.len: {len(train_loader)}")
+    print(f"test_loader.len: {len(test_loader)}")
+
     model = RNNClasssifier(
             input_dim=28,
             hidden_dim=128,
