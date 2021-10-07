@@ -42,13 +42,14 @@ if __name__ == '__main__':
             loss = criterion(output, labels)
             optimizer.zero_grad()
             loss.backward()
-            loss += loss.item() * images.size(0)
+            optimizer.step()
+            loss += loss.item()
             corrects += torch.sum(preds == labels.data)
             train_num += images.size(0)
 
-        train_losses.append(loss / train_num)
-        train_acces.append(corrects.item() / train_num)
-        print(f"{epoch+1:>3d}: Train Loss: {train_losses[-1]:.4f}, Train Acc: {train_acces[-1]:.4f}")
+        train_losses.append(loss / len(train_loader))
+        train_acces.append(corrects.double().item() / train_num)
+        print(f"Train: {epoch+1:>03d}: Train Loss: {train_losses[-1]:.4f}, Train Acc: {train_acces[-1]:.4f}")
 
         model.eval()
         corrects = 0
@@ -60,10 +61,13 @@ if __name__ == '__main__':
             output = model(images)
             preds = torch.argmax(output, dim=1)
             loss = criterion(output, labels)
-            loss += loss.item() * images.size(0)
+            loss += loss.item()
             corrects += torch.sum(preds == labels.data)
             test_num += images.size(0)
 
-        test_losses.append(loss / test_num)
-        test_acces.append(corrects.item() / test_num)
-        print(f"{epoch+1:>3d}: Train Loss: {test_losses[-1]:.4f}, Train Acc: {test_acces[-1]:.4f}")
+        test_losses.append(loss / len(test_loader))
+        test_acces.append(corrects.double().item() / test_num)
+        print(f"Test : {epoch+1:>03d}: Test  Loss: {test_losses[-1]:.4f}, Test  Acc: {test_acces[-1]:.4f}")
+
+    torch.save({"state_dict": model.state_dict(),}, "./checkpoint/rnn.pth")
+    print('Save model done!')
